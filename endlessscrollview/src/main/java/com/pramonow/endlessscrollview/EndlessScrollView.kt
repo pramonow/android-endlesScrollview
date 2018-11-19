@@ -13,15 +13,14 @@ class EndlessScrollView : NestedScrollView {
     private var loadingView:View
     private var lastPage:Boolean = false
 
-    //private lateinit var adapter: Adapter<RecyclerView.ViewHolder>
-    private lateinit var endlessScrollCallback:EndlessScrollCallback
 
+    private lateinit var endlessScrollCallback:EndlessScrollCallback
 
     public var recyclerView:RecyclerView
 
     constructor(context:Context, attributeSet: AttributeSet) : super(context,attributeSet) {
 
-        View.inflate(context, R.layout.view_lib,this)
+        View.inflate(context, R.layout.endless_scoll_view_layout,this)
         //this.recyclerView = RecyclerView(context)
         this.recyclerView = findViewById(R.id.recycler_view)
         recyclerView.isNestedScrollingEnabled = false
@@ -32,10 +31,6 @@ class EndlessScrollView : NestedScrollView {
         this.loadingView = findViewById(R.id.loading_box)
     }
 
-    /*public fun setRecyclerViewAdapter(adapter:Adapter<RecyclerView.ViewHolder>)
-    {
-        this.adapter = adapter
-    }*/
 
     public fun setRecyclerViewLayoutManager(layoutManager: RecyclerView.LayoutManager) {
         recyclerView.layoutManager = layoutManager

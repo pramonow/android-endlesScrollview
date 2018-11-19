@@ -11,9 +11,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         var sampleAdapter = SampleAdapter()
-        var endlessScrollView = findViewById<EndlessScrollView>(R.id.endless_list)
-
         sampleAdapter.setData(generateString())
+
+        /*
+            Endless scoll view declaration block
+         */
+        var endlessScrollView = findViewById<EndlessScrollView>(R.id.endless_list)
         endlessScrollView.recyclerView.adapter = sampleAdapter
 
         endlessScrollView.setEndlessScrollCallback(object : EndlessScrollCallback {
@@ -25,19 +28,18 @@ class MainActivity : AppCompatActivity() {
                 Thread(object : Runnable {
                     override fun run() {
                         Thread.sleep(300)
-
                         runOnUiThread(object : Runnable {
                             override fun run() {
                                 sampleAdapter.setData(mutable)
                                 sampleAdapter.notifyDataSetChanged()
                             }
                         })
-
                     }
                 }).start()
-
             }
         })
+
+
     }
 
     fun generateString():MutableList<String>
