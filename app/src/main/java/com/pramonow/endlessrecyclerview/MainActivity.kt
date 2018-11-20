@@ -10,21 +10,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Set adapter to be
         var sampleAdapter = SampleAdapter()
         sampleAdapter.setData(generateString())
 
         /*
-            Endless scoll view declaration block
+            Endless scroll view declaration block
          */
         var endlessScrollView = findViewById<EndlessScrollView>(R.id.endless_list)
+
+        //Put the adapter inside recycler view like usual recycler view
         endlessScrollView.recyclerView.adapter = sampleAdapter
 
+        //Set callback for loading more
         endlessScrollView.setEndlessScrollCallback(object : EndlessScrollCallback {
+
+            //This function will load more list and add it inside the adapter
             override fun loadMore() {
 
                 var list = sampleAdapter.adapterList + generateString()
                 var mutable = list.toMutableList()
 
+                //Using thread and sleep to make the load more visible
                 Thread(object : Runnable {
                     override fun run() {
                         Thread.sleep(300)
@@ -38,24 +45,15 @@ class MainActivity : AppCompatActivity() {
                 }).start()
             }
         })
-
-
     }
 
+    //Generate default data for the adapter
     fun generateString():MutableList<String>
     {
         var stringList = ArrayList<String>()
 
-        stringList.add("1")
-        stringList.add("1")
-        stringList.add("1")
-        stringList.add("1")
-        stringList.add("1")
-        stringList.add("1")
-        stringList.add("1")
-        stringList.add("1")
-        stringList.add("1")
-        stringList.add("1")
+        for(i in 1..10)
+            stringList.add("Sample")
 
         return stringList
     }

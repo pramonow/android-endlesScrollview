@@ -11,7 +11,7 @@ class SampleAdapter: RecyclerView.Adapter<SampleAdapter.SampleVH>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SampleVH {
 
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.dummy_adapter,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.sample_adapter,parent,false)
 
         return SampleVH(itemView)
     }
@@ -34,7 +34,5 @@ class SampleAdapter: RecyclerView.Adapter<SampleAdapter.SampleVH>(){
         constructor(itemView: View) : super(itemView){
 
         }
-
-
     }
 }

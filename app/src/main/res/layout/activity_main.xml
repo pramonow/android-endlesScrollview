@@ -10,6 +10,6 @@
     <com.pramonow.endlessrecyclerview.EndlessScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-    android:id="@+id/endless_list"/>
+            android:id="@+id/endless_list"/>
 
 </android.support.constraint.ConstraintLayout>

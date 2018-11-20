@@ -21,7 +21,7 @@
         <View
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/gray"
+                android:background="@color/loading_block_gray"
                 android:id="@+id/loading_box"
                 android:visibility="invisible"/>
 
