@@ -12,6 +12,8 @@ class EndlessScrollView : NestedScrollView {
 
     private var loadingView:View
     private var lastPage:Boolean = false
+    private var blockLoad:Boolean = false
+    private var loadBeforeBottom = false
 
     //Callback provided for endless scroll
     private lateinit var endlessScrollCallback:EndlessScrollCallback
@@ -40,6 +42,12 @@ class EndlessScrollView : NestedScrollView {
     public fun setEndlessScrollCallback(endlessScrollCallback: EndlessScrollCallback) {
         this.endlessScrollCallback = endlessScrollCallback
 
+        //block to test for super lazy load
+        val layoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
+        val pos = layoutManager.findLastCompletelyVisibleItemPosition()
+        val numItems = recyclerView.getAdapter()?.getItemCount()
+        //return pos >= numItems
+
         setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
 
             //Set callback when user is scrolling
@@ -53,7 +61,7 @@ class EndlessScrollView : NestedScrollView {
                 if(scrollY == ( v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     if (lastPage)
                         loadingView.visibility = View.INVISIBLE
-                    else {
+                    else if(blockLoad == false){
                         endlessScrollCallback.loadMore()
                         loadingView.visibility = View.VISIBLE
                     }
@@ -67,5 +75,15 @@ class EndlessScrollView : NestedScrollView {
     {
         lastPage = true
         loadingView.visibility = View.INVISIBLE
+    }
+
+    public fun blockLoading()
+    {
+        blockLoad = true
+    }
+
+    public fun releaseBlock()
+    {
+        blockLoad = false
     }
 }
