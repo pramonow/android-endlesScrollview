@@ -40,19 +40,50 @@ class EndlessScrollView : NestedScrollView {
 
     //Set callback for the endless scroll view, this function must be called else the endless scroll view will not work
     public fun setEndlessScrollCallback(endlessScrollCallback: EndlessScrollCallback) {
+
         this.endlessScrollCallback = endlessScrollCallback
 
-        //block to test for super lazy load
-        val layoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
-        val pos = layoutManager.findLastCompletelyVisibleItemPosition()
-        val numItems = recyclerView.getAdapter()?.getItemCount()
-        //return pos >= numItems
+        if(!loadBeforeBottom)
+            setOnMostBottomScrollCallback()
+        else
+            setLoadBeforeReachingBottomCallback()
 
+    }
+
+    //Do this when you don't want to load data anymore
+    fun setLastPage()
+    {
+        lastPage = true
+        loadingView.visibility = View.INVISIBLE
+    }
+
+    //Block load more from being called, usually used when waiting for API call to finish
+    fun blockLoading()
+    {
+        blockLoad = true
+    }
+
+    //Unblock load more, usaually used when API call has finished
+    fun releaseBlock()
+    {
+        blockLoad = false
+    }
+
+    //For loading data before reaching bottom
+    fun setLoadBeforeBottom(boolean: Boolean)
+    {
+        this.loadBeforeBottom = boolean
+    }
+
+    private fun setOnMostBottomScrollCallback()
+    {
         setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
 
             //Set callback when user is scrolling
             override fun onScrollChange(v:NestedScrollView,scrollX:Int,scrollY:Int,oldScrollX:Int,oldScrollY:Int) {
 
+                if(blockLoad)
+                    return
                 /*
                     When the scroll view has reached the end then do the according:
                     - if not last page then call the load more
@@ -61,7 +92,7 @@ class EndlessScrollView : NestedScrollView {
                 if(scrollY == ( v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
                     if (lastPage)
                         loadingView.visibility = View.INVISIBLE
-                    else if(blockLoad == false){
+                    else {
                         endlessScrollCallback.loadMore()
                         loadingView.visibility = View.VISIBLE
                     }
@@ -70,20 +101,27 @@ class EndlessScrollView : NestedScrollView {
         })
     }
 
-    //Do this when you don't want to load data anymore
-    public fun setLastPage()
-    {
-        lastPage = true
-        loadingView.visibility = View.INVISIBLE
+    private fun setLoadBeforeReachingBottomCallback() {
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                //block to test for super lazy load
+                val layoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
+                val pos = layoutManager.findLastCompletelyVisibleItemPosition()
+                val numItems = recyclerView.getAdapter()?.getItemCount()
+
+                if (pos >= numItems!! - 1) {
+                    if (lastPage)
+                        loadingView.visibility = View.INVISIBLE
+                    else {
+                        endlessScrollCallback.loadMore()
+                        loadingView.visibility = View.VISIBLE
+                    }
+                }
+            }
+        })
     }
 
-    public fun blockLoading()
-    {
-        blockLoad = true
-    }
-
-    public fun releaseBlock()
-    {
-        blockLoad = false
-    }
 }
