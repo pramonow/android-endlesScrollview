@@ -1,6 +1,6 @@
-# Android Endless Scroll View for Recycler View [![](https://jitpack.io/v/pramonow/android-endlessScrollview.svg)](https://jitpack.io/#pramonow/android-endlessScrollview)
+# Android Endless Scroll View for Recycler View [![](https://jitpack.io/v/pramonow/android-endlessrecyclerview.svg)](https://jitpack.io/#pramonow/android-endlessrecyclerview)
 
-Implementing endless recycler view the easy way with this library. This library doesn't extends Recycler view, instead it extends towards Nested Scroll View. Implemented fully with Kotlin.
+Implementing endless recycler view the easy way with this library. This library doesn't extends Recycler view, instead it extends towards Frame Layout. Implemented fully with Kotlin.
 
 ![alt text](https://raw.githubusercontent.com/pramonow/just_images/master/endlessrv.gif)
 
@@ -14,7 +14,7 @@ Implementing endless recycler view the easy way with this library. This library 
 Dependency
 
 	dependencies {
-	        implementation 'com.github.pramonow:android-endlessScrollview:-SNAPSHOT'
+	        implementation 'com.github.pramonow:android-endlessrecyclerview:-SNAPSHOT'
 	}
 
 # How to use
@@ -45,3 +45,10 @@ For the Android Activity
         })
 
 Recycler view is publicly accessible so it is possible to customize your recycler view and access your adapter
+
+Several Methods that can be used:
+- fun setLastPage() => Do this when you don't want to load data anymore
+- fun blockLoading() => Block load more from being called, usually used when waiting for API call to finish
+- fun releaseBlock() => Unblock load more, usaually used when API call has finished
+- fun setLoadBeforeBottom(boolean: Boolean) => Used to set whether you want to load data before user reach bottom 
+
