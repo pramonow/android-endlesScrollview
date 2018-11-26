@@ -2,6 +2,7 @@ package com.pramonow.endlessrecyclerview
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 
 
 class MainActivity : AppCompatActivity() {
@@ -22,11 +23,18 @@ class MainActivity : AppCompatActivity() {
         //Put the adapter inside recycler view like usual recycler view
         endlessScrollView.recyclerView.adapter = sampleAdapter
 
+        // Uncomment to allow load before scroll to most bottom
+        // Currently will start loading list when second last item is on screen
+        // endlessScrollView.setLoadBeforeBottom(true)
+
         //Set callback for loading more
         endlessScrollView.setEndlessScrollCallback(object : EndlessScrollCallback {
 
             //This function will load more list and add it inside the adapter
             override fun loadMore() {
+
+                //Now list view can be set so that it will block load until certain task finish
+                endlessScrollView.blockLoading()
 
                 var list = sampleAdapter.adapterList + generateString()
                 var mutable = list.toMutableList()
@@ -34,11 +42,14 @@ class MainActivity : AppCompatActivity() {
                 //Using thread and sleep to make the load more visible
                 Thread(object : Runnable {
                     override fun run() {
-                        Thread.sleep(300)
+                        Thread.sleep(500)
                         runOnUiThread(object : Runnable {
                             override fun run() {
                                 sampleAdapter.setData(mutable)
                                 sampleAdapter.notifyDataSetChanged()
+
+                                //list view will release the blocking action here, when all data is fetched
+                                endlessScrollView.releaseBlock()
                             }
                         })
                     }
