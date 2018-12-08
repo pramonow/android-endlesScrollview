@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 
-
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +25,9 @@ class MainActivity : AppCompatActivity() {
         // Uncomment to allow load before scroll to most bottom
         // Currently will start loading list when second last item is on screen
         // endlessScrollView.setLoadBeforeBottom(true)
+
+        // Also, offset for load before bottom can be set
+        // endlessScrollView.loadOffset = 3
 
         //Set callback for loading more
         endlessScrollView.setEndlessScrollCallback(object : EndlessScrollCallback {

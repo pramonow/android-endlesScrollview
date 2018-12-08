@@ -6,14 +6,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.View
+import android.widget.FrameLayout
 import com.pramonow.endlessscrollview.R
 
-class EndlessScrollView : NestedScrollView {
+class EndlessScrollView : FrameLayout {
 
-    private var loadingView:View
     private var lastPage:Boolean = false
     private var blockLoad:Boolean = false
     private var loadBeforeBottom = false
+
+    //Offset for load before bottom
+    public var loadOffset = 3
 
     //Callback provided for endless scroll
     private lateinit var endlessScrollCallback:EndlessScrollCallback
@@ -24,18 +27,13 @@ class EndlessScrollView : NestedScrollView {
     constructor(context:Context, attributeSet: AttributeSet) : super(context,attributeSet) {
 
         //Set the view
-        View.inflate(context, R.layout.endless_scoll_view_layout,this)
+        View.inflate(context, R.layout.endless_recycler_view_layout,this)
+
         this.recyclerView = findViewById(R.id.recycler_view)
-        this.loadingView = findViewById(R.id.loading_box)
         recyclerView.isNestedScrollingEnabled = false
 
         //Set default layout for recycler view to be linear
         recyclerView.layoutManager = LinearLayoutManager(context)
-    }
-
-    @Deprecated("Recycler view can be directly accessed")
-    public fun setRecyclerViewLayoutManager(layoutManager: RecyclerView.LayoutManager) {
-        recyclerView.layoutManager = layoutManager
     }
 
     //Set callback for the endless scroll view, this function must be called else the endless scroll view will not work
@@ -47,14 +45,12 @@ class EndlessScrollView : NestedScrollView {
             setOnMostBottomScrollCallback()
         else
             setLoadBeforeReachingBottomCallback()
-
     }
 
     //Do this when you don't want to load data anymore
     fun setLastPage()
     {
         lastPage = true
-        loadingView.visibility = View.INVISIBLE
     }
 
     //Block load more from being called, usually used when waiting for API call to finish
@@ -75,36 +71,10 @@ class EndlessScrollView : NestedScrollView {
         this.loadBeforeBottom = boolean
     }
 
+    //Callback for loading data when scrolled to most bottom
     private fun setOnMostBottomScrollCallback()
     {
-        setOnScrollChangeListener(object : NestedScrollView.OnScrollChangeListener {
-
-            //Set callback when user is scrolling
-            override fun onScrollChange(v:NestedScrollView,scrollX:Int,scrollY:Int,oldScrollX:Int,oldScrollY:Int) {
-
-                if(blockLoad)
-                    return
-                /*
-                    When the scroll view has reached the end then do the according:
-                    - if not last page then call the load more
-                    - if last page then stop loading anymore data
-                 */
-                if(scrollY == ( v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight())) {
-                    if (lastPage)
-                        loadingView.visibility = View.INVISIBLE
-                    else {
-                        endlessScrollCallback.loadMore()
-                        loadingView.visibility = View.VISIBLE
-                    }
-                }
-            }
-        })
-    }
-
-    private fun setLoadBeforeReachingBottomCallback() {
-
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
                 //block to test for super lazy load
@@ -113,15 +83,37 @@ class EndlessScrollView : NestedScrollView {
                 val numItems = recyclerView.getAdapter()?.getItemCount()
 
                 if (pos >= numItems!! - 1) {
-                    if (lastPage)
-                        loadingView.visibility = View.INVISIBLE
-                    else {
+                    if (lastPage){
+
+                    }
+                    else if(!blockLoad){
                         endlessScrollCallback.loadMore()
-                        loadingView.visibility = View.VISIBLE
                     }
                 }
             }
         })
     }
 
+    //Callback for loading data before reaching most bottom
+    private fun setLoadBeforeReachingBottomCallback() {
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                //block to test for super lazy load
+                val layoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
+                val pos = layoutManager.findLastCompletelyVisibleItemPosition()
+                val numItems = recyclerView.getAdapter()?.getItemCount()
+
+                if (pos >= numItems!! - loadOffset) {
+                    if (lastPage){
+
+                    }
+                    else if(!blockLoad){
+                        endlessScrollCallback.loadMore()
+                    }
+                }
+            }
+        })
+    }
 }
