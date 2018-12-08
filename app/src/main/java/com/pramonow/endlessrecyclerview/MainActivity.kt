@@ -17,10 +17,10 @@ class MainActivity : AppCompatActivity() {
         /*
             Endless scroll view declaration block
          */
-        var endlessScrollView = findViewById<EndlessScrollView>(R.id.endless_list)
+        var endlessRecylerView = findViewById<EndlessRecyclerView>(R.id.endless_list)
 
         //Put the adapter inside recycler view like usual recycler view
-        endlessScrollView.recyclerView.adapter = sampleAdapter
+        endlessRecylerView.recyclerView.adapter = sampleAdapter
 
         // Uncomment to allow load before scroll to most bottom
         // Currently will start loading list when second last item is on screen
@@ -30,13 +30,13 @@ class MainActivity : AppCompatActivity() {
         // endlessScrollView.loadOffset = 3
 
         //Set callback for loading more
-        endlessScrollView.setEndlessScrollCallback(object : EndlessScrollCallback {
+        endlessRecylerView.setEndlessScrollCallback(object : EndlessScrollCallback {
 
             //This function will load more list and add it inside the adapter
             override fun loadMore() {
 
                 //Now list view can be set so that it will block load until certain task finish
-                endlessScrollView.blockLoading()
+                endlessRecylerView.blockLoading()
 
                 var list = sampleAdapter.adapterList + generateString()
                 var mutable = list.toMutableList()
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                                 sampleAdapter.notifyDataSetChanged()
 
                                 //list view will release the blocking action here, when all data is fetched
-                                endlessScrollView.releaseBlock()
+                                endlessRecylerView.releaseBlock()
                             }
                         })
                     }

@@ -21,22 +21,22 @@ Dependency
 
 In your xml layout file put in this block
 
-    <com.pramonow.endlessrecyclerview.EndlessScrollView
+    <com.pramonow.endlessrecyclerview.EndlessRecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/endless_scroll_view">
-    </com.pramonow.endlessrecyclerview.EndlessScrollView>
+    </com.pramonow.endlessrecyclerview.EndlessRecyclerView>
 
 For the Android Activity
 
         //Simply build the view this way
-        var endlessScrollView = findViewById<EndlessScrollView>(R.id.endless_list)
+        var endlessRecyclerView = findViewById<EndlessRecyclerView>(R.id.endless_list)
 
         //Put the adapter inside recycler view like usual recycler view
-        endlessScrollView.recyclerView.adapter = sampleAdapter
+        endlessRecyclerView.recyclerView.adapter = sampleAdapter
 
         //Set callback for loading more
-        endlessScrollView.setEndlessScrollCallback(object : EndlessScrollCallback {
+        endlessRecyclerView.setEndlessScrollCallback(object : EndlessScrollCallback {
 
             //This function will load more list and add it inside the adapter
             override fun loadMore() {

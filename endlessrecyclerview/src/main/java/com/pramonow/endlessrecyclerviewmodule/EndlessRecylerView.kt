@@ -7,9 +7,9 @@ import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import com.pramonow.endlessscrollview.R
+import com.pramonow.endlessrecyclerviewmodule.R
 
-class EndlessScrollView : FrameLayout {
+class EndlessRecyclerView : FrameLayout {
 
     private var lastPage:Boolean = false
     private var blockLoad:Boolean = false
