@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:paddingBottom="36dp"
         android:clipToPadding="false"
-        android:id="@+id/recycler_view"
-        android:background="@color/loading_block_gray"/>
+        android:id="@+id/recycler_view"/>
 
 </FrameLayout>
