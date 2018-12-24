@@ -24,10 +24,10 @@ class MainActivity : AppCompatActivity() {
 
         // Uncomment to allow load before scroll to most bottom
         // Currently will start loading list when second last item is on screen
-        // endlessScrollView.setLoadBeforeBottom(true)
+        //endlessRecylerView.setLoadBeforeBottom(true)
 
         // Also, offset for load before bottom can be set
-        // endlessScrollView.loadOffset = 3
+        //endlessRecylerView.loadOffset = 5
 
         //Set callback for loading more
         endlessRecylerView.setEndlessScrollCallback(object : EndlessScrollCallback {
@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
             //This function will load more list and add it inside the adapter
             override fun loadMore() {
 
+                Log.d("baniman", "load")
                 //Now list view can be set so that it will block load until certain task finish
                 endlessRecylerView.blockLoading()
 

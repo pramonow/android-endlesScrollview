@@ -17,7 +17,7 @@ class SampleAdapter: RecyclerView.Adapter<SampleAdapter.SampleVH>(){
     }
 
     override fun getItemCount(): Int {
-        return adapterList.size;
+        return adapterList.size
     }
 
     fun setData(promoList: MutableList<String>)
