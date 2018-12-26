@@ -41,10 +41,17 @@ class EndlessRecyclerView : FrameLayout {
 
         this.endlessScrollCallback = endlessScrollCallback
 
-        if(!loadBeforeBottom)
-            setOnMostBottomScrollCallback()
-        else
-            setLoadBeforeReachingBottomCallback()
+        //Scroll listener for the recycler view
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                val layoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
+                val pos = layoutManager.findLastCompletelyVisibleItemPosition()
+                val numItems = recyclerView.getAdapter()?.getItemCount()
+
+                loadByPosition(loadBeforeBottom, pos, numItems!!)
+            }
+        })
     }
 
     //Do this when you don't want to load data anymore
@@ -71,49 +78,17 @@ class EndlessRecyclerView : FrameLayout {
         this.loadBeforeBottom = boolean
     }
 
-    //Callback for loading data when scrolled to most bottom
-    private fun setOnMostBottomScrollCallback()
-    {
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+    //Function for load more data logic
+    private fun loadByPosition(loadBeforeBottom : Boolean, position:Int, numberItems:Int) {
 
-                //block to test for super lazy load
-                val layoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
-                val pos = layoutManager.findLastCompletelyVisibleItemPosition()
-                val numItems = recyclerView.getAdapter()?.getItemCount()
+        //Initialize default offset
+        var offset = 1
 
-                if (pos >= numItems!! - 1) {
-                    if (lastPage){
+        if(loadBeforeBottom == true)
+            offset = loadOffset
 
-                    }
-                    else if(!blockLoad){
-                        endlessScrollCallback.loadMore()
-                    }
-                }
-            }
-        })
+        if(!blockLoad && !lastPage && position >= numberItems - offset)
+            endlessScrollCallback.loadMore()
     }
 
-    //Callback for loading data before reaching most bottom
-    private fun setLoadBeforeReachingBottomCallback() {
-
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-
-                //block to test for super lazy load
-                val layoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
-                val pos = layoutManager.findLastCompletelyVisibleItemPosition()
-                val numItems = recyclerView.getAdapter()?.getItemCount()
-
-                if (pos >= numItems!! - loadOffset) {
-                    if (lastPage){
-
-                    }
-                    else if(!blockLoad){
-                        endlessScrollCallback.loadMore()
-                    }
-                }
-            }
-        })
-    }
 }
