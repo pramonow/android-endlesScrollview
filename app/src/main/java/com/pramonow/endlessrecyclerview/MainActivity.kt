@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         var endlessRecylerView = findViewById<EndlessRecyclerView>(R.id.endless_list)
 
         //Put the adapter inside recycler view like usual recycler view
-        endlessRecylerView.recyclerView.adapter = sampleAdapter
+        endlessRecylerView.adapter = sampleAdapter
 
         // Uncomment to allow load before scroll to most bottom
         // Currently will start loading list when second last item is on screen
