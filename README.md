@@ -33,7 +33,7 @@ For the Android Activity
         var endlessRecyclerView = findViewById<EndlessRecyclerView>(R.id.endless_list)
 
         //Put the adapter inside recycler view like usual recycler view
-        endlessRecyclerView.recyclerView.adapter = sampleAdapter
+        endlessRecyclerView.adapter = sampleAdapter
 
         //Set callback for loading more
         endlessRecyclerView.setEndlessScrollCallback(object : EndlessScrollCallback {
