@@ -1,6 +1,6 @@
 # Android Endless Scroll View for Recycler View [![](https://jitpack.io/v/pramonow/android-endlessrecyclerview.svg)](https://jitpack.io/#pramonow/android-endlessrecyclerview)
 
-Implementing endless recycler view the easy way with this library. This library doesn't extends Recycler view, instead it extends towards Frame Layout. Implemented fully with Kotlin.
+Implementing endless recycler view the easy way with this library. This library extends RecyclerView so any functions from recycler view can be called. Implemented fully with Kotlin.
 
 ![alt text](https://raw.githubusercontent.com/pramonow/just_images/master/endlessrv.gif)
 

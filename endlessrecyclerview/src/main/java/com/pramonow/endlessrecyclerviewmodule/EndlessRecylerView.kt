@@ -67,6 +67,8 @@ class EndlessRecyclerView : RecyclerView {
         //Initialize default offset
         var offset = 1
 
+        //If recycler view is set to load before reaching bottom
+        //Then set the offset value to the number when it want to load before reaching bottom of the list
         if(loadBeforeBottom == true)
             offset = loadOffset
 

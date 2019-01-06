@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         // Currently will start loading list when second last item is on screen
         //endlessRecylerView.setLoadBeforeBottom(true)
 
-        // Also, offset for load before bottom can be set
+        // Also, offset for load before bottom can be set, default is 2 object before bottom
         //endlessRecylerView.loadOffset = 5
 
         //Set callback for loading more
