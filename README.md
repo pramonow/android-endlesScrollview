@@ -12,6 +12,13 @@ Implementing endless recycler view the easy way with this library. This library 
 	}
   
 Dependency
+	
+	dependencies {
+	        implementation 'com.github.pramonow:android-endlessrecyclerview:1.0.0'
+	}
+
+
+Or you can use SNAPSHOT to keep your module up to date
 
 	dependencies {
 	        implementation 'com.github.pramonow:android-endlessrecyclerview:-SNAPSHOT'
