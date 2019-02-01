@@ -2,7 +2,7 @@
 
 Implementing endless recycler view the easy way with this library. This library extends RecyclerView so any functions from recycler view can be called. Implemented fully with Kotlin.
 
-![alt text](https://github.com/pramonow/just_images/blob/master/endlessrv.gif?raw=true)
+![alt text](https://github.com/pramonow/android-endlessrecyclerview/blob/master/screenshoot.gif?raw=true)
 
 	allprojects {
 		repositories {
