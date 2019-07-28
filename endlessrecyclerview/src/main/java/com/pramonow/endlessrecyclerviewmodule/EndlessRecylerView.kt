@@ -1,11 +1,11 @@
-package com.pramonow.endlessrecyclerview
+package com.pramonow.endlessrecyclerviewmodule
 
 import android.content.Context
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.AttributeSet
 
-class EndlessRecyclerView : RecyclerView {
+class EndlessRecyclerView (context: Context, attributeSet: AttributeSet) : RecyclerView(context, attributeSet) {
 
     private var lastPage:Boolean = false
     private var blockLoad:Boolean = false
@@ -14,19 +14,14 @@ class EndlessRecyclerView : RecyclerView {
     //Offset for load before bottom
     var loadOffset = 3
 
-    //Callback provided for endless scroll
-    private lateinit var endlessScrollCallback:EndlessScrollCallback
-
-    constructor(context:Context, attributeSet: AttributeSet) : super(context,attributeSet) {
-
-        //Set default layout for recycler view to be linear
+    //Set default layout for recycler view to be linear
+    init {
         layoutManager = LinearLayoutManager(context)
     }
 
+    //INTERFACE, FOR THE SAKE OF PEOPLE STILL USING INTERFACE
     //Set callback for the endless scroll view, this function must be called else the endless scroll view will not work
     public fun setEndlessScrollCallback(endlessScrollCallback: EndlessScrollCallback) {
-
-        this.endlessScrollCallback = endlessScrollCallback
 
         //Scroll listener for the recycler view
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -36,7 +31,44 @@ class EndlessRecyclerView : RecyclerView {
                 val pos = layoutManager.findLastCompletelyVisibleItemPosition()
                 val numItems = recyclerView.getAdapter()?.getItemCount()
 
-                loadByPosition(loadBeforeBottom, pos, numItems!!)
+                //Initialize default offset
+                var offset = 1
+
+                //If recycler view is set to load before reaching bottom
+                //Then set the offset value to the number when it want to load before reaching bottom of the list
+                if(loadBeforeBottom == true)
+                    offset = loadOffset
+
+                if(!blockLoad && !lastPage && pos >= numItems!! - offset) {
+                    endlessScrollCallback.loadMore()
+                }
+            }
+        })
+    }
+
+    //THIS IS LAMBDA VERSION SINCE THIS IS NOT WRITTEN IN JAVA SO SAM CONVERSION IS NOT APPLICABLE
+    //Set callback for the endless scroll view, this function must be called else the endless scroll view will not work
+    public fun setEndlessScrollCallback(callback: ()-> Unit) {
+
+        //Scroll listener for the recycler view
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+
+                val layoutManager = recyclerView.getLayoutManager() as LinearLayoutManager
+                val pos = layoutManager.findLastCompletelyVisibleItemPosition()
+                val numItems = recyclerView.getAdapter()?.getItemCount()
+
+                //Initialize default offset
+                var offset = 1
+
+                //If recycler view is set to load before reaching bottom
+                //Then set the offset value to the number when it want to load before reaching bottom of the list
+                if(loadBeforeBottom == true)
+                    offset = loadOffset
+
+                if(!blockLoad && !lastPage && pos >= numItems!! - offset) {
+                    callback.invoke()
+                }
             }
         })
     }
@@ -60,20 +92,4 @@ class EndlessRecyclerView : RecyclerView {
     fun setLoadBeforeBottom(boolean: Boolean) {
         this.loadBeforeBottom = boolean
     }
-
-    //Function for load more data logic
-    private fun loadByPosition(loadBeforeBottom : Boolean, position:Int, numberItems:Int) {
-
-        //Initialize default offset
-        var offset = 1
-
-        //If recycler view is set to load before reaching bottom
-        //Then set the offset value to the number when it want to load before reaching bottom of the list
-        if(loadBeforeBottom == true)
-            offset = loadOffset
-
-        if(!blockLoad && !lastPage && position >= numberItems - offset)
-            endlessScrollCallback.loadMore()
-    }
-
 }
